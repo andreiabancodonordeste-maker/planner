@@ -57,6 +57,27 @@ app.get("/tasks/:id", (req, res) => {
   res.json(task);
 });
 
+app.post("/tasks", (req, res) => {
+  const { title, date } = req.body;
+  
+  if (!title || !date) {
+    return res.status(400).json({ error: "Title and date are required" });
+  }
+
+  const id = Math.max(...tasks.keys()) + 1;
+  
+  const newTask = {
+    id,
+    title,
+    completed: false,
+    date,
+    completionDate: null
+  };
+  
+  tasks.set(id, newTask);
+  res.status(201).json(newTask); 
+});  
+
 // Start the server
 if (require.main === module) {
   app.listen(PORT, () => {
