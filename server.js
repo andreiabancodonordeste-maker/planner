@@ -57,6 +57,19 @@ app.get("/tasks/:id", (req, res) => {
   res.json(task);
 });
 
+app.put("/tasks/:id/completion", (req, res) => {
+  const id = Number(req.params.id);
+  const task = tasks.get(id);
+
+  if (!task) {
+    return res.status(404).json({ error: "Task not found" });
+  }
+
+  task.completed = true;
+  task.completionDate = new Date().toISOString().split("T")[0];
+  res.json(task);
+});
+
 // Start the server
 if (require.main === module) {
   app.listen(PORT, () => {

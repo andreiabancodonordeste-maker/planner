@@ -40,3 +40,11 @@ test("POST /tasks creates a new task", {skip: true}, async () => {
   assert.equal(response.body.date, newTask.date);
   assert.equal(response.body.completionDate, null);
 });  
+
+test("PUT /tasks/:id/completion marks a task as completed", async () => {
+  const response = await request(app).put("/tasks/1/completion");
+
+  assert.equal(response.status, 200);
+  assert.equal(response.body.completed, true);
+  assert.notEqual(response.body.completionDate, null);  
+});
