@@ -1,4 +1,5 @@
 const express = require("express");
+const pool = require("./database");
 
 const app = express();
 const PORT = 3000;
@@ -37,24 +38,19 @@ const tasks = new Map([
 ]);
 
 // GET /tasks - "endpoint" que recupera todas as tarefas.
-app.get("/tasks", (req, res) => {
-  const allTasks = [];
-  for (const task of tasks.values()) {
-    allTasks.push(task);
+app.get("/tasks", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM task ORDER BY id"
+    );
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Database error"
+    });
   }
-  res.json(allTasks);
-});
-
-// GET /tasks/:id - "endpoint" que recupera uma tarefa específica pelo ID.
-app.get("/tasks/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const task = tasks.get(id);
-
-  if (!task) {
-    return res.status(404).json({ error: "Task not found" });
-  }
-
-  res.json(task);
 });
 
 // Start the server
