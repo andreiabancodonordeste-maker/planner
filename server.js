@@ -57,6 +57,25 @@ app.get("/tasks/:id", (req, res) => {
   res.json(task);
 });
 
+// PATCH /tasks/:id - marca uma tarefa específica como concluída.
+app.patch("/tasks/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const task = tasks.get(id);
+
+  if (!task) {
+    return res.status(404).json({ error: "Task not found" });
+  }
+
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, "0");
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+
+  task.completed = true;
+  task.completionDate = `${day}/${month}/${today.getFullYear()}`;
+
+  res.json(task);
+});
+
 // Start the server
 if (require.main === module) {
   app.listen(PORT, () => {
