@@ -74,6 +74,19 @@ app.delete("/tasks/:id", (req, res) => {
   res.status(200).end();
 });
 
+app.patch("/tasks/:id/reopen", (req, res) => {
+  const id = Number(req.params.id);
+  const task = tasks.get(id);
+
+  if (!task) {
+    return res.status(404).json({ error: "Task not found" });
+  }
+
+  task.completed = false;
+  task.completionDate = null;
+  res.json(task);
+});
+
 app.post("/tasks", (req, res) => {
   const { title, date } = req.body;
 
