@@ -74,7 +74,7 @@ app.delete("/tasks/:id", (req, res) => {
   res.status(200).end();
 });
 
-app.patch("/tasks/:id/reopen", (req, res) => {
+app.post("/tasks/:id/reopen", (req, res) => {
   const id = Number(req.params.id);
   const task = tasks.get(id);
 

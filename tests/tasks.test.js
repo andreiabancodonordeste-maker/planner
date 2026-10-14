@@ -84,12 +84,12 @@ test("DELETE /tasks/:id returns 404 for a non-existent task", async () => {
   assert.deepEqual(response.body, { error: "Task not found" });
 });
 
-test("PATCH /tasks/:id/reopen reopens an existing task", async () => {
+test("POST /tasks/:id/reopen reopens an existing task", async () => {
   const createdTask = await request(app).post("/tasks").send({
     title: "Tarefa para testar a reabertura",
     date: "14/10/2026"
   });
-  const response = await request(app).patch(`/tasks/${createdTask.body.id}/reopen`);
+  const response = await request(app).post(`/tasks/${createdTask.body.id}/reopen`);
 
   assert.equal(createdTask.status, 201);
   assert.equal(response.status, 200);
@@ -103,8 +103,8 @@ test("PATCH /tasks/:id/reopen reopens an existing task", async () => {
   assert.equal(reopenedTask.body.completionDate, null);
 });
 
-test("PATCH /tasks/:id/reopen returns 404 for a non-existent task", async () => {
-  const response = await request(app).patch("/tasks/999/reopen");
+test("POST /tasks/:id/reopen returns 404 for a non-existent task", async () => {
+  const response = await request(app).post("/tasks/999/reopen");
 
   assert.equal(response.status, 404);
   assert.deepEqual(response.body, { error: "Task not found" });
